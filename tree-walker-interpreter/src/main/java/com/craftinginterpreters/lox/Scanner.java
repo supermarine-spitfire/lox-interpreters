@@ -35,6 +35,7 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    private boolean inBlockComment = false;
 
     /* Raw source code stored as a single string. */
     Scanner(String source) {
@@ -80,10 +81,25 @@ class Scanner {
                 addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '/':
-                if (match('/')) {
+                if (match('/') && !inBlockComment) {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd()) advance();
-                } else {
+                } else if (match('*')) {
+                    // Encountered block comment.
+                    inBlockComment = true;
+                    while (!isAtEnd()) {
+                        advance();
+
+                        if (peek() == '*' && peekNext() == '/') {
+                            advance();
+                            advance();
+                            inBlockComment = false;
+                            break;
+                        }
+                    }
+                    if (inBlockComment) Lox.error(line, "Unclosed block comment.");
+                }
+                else {
                     addToken(SLASH);
                 }
                 break;
