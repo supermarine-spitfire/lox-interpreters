@@ -25,6 +25,13 @@ hs_err_pid*
 # IntelliJ project files
 *.iml
 
+# VS Code project files
+.project
+.classpath
+
 # Directories to ignore
+.idea/
+.settings/
+.vscode/
 welcome/HelloWorld/
 welcome/c-doubly-linked-list/
