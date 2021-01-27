@@ -3,7 +3,7 @@ package com.craftinginterpreters.lox;
 import java.util.List;
 
 public class Interpeter implements Expr.Visitor<Object>,
-                                   Stmt.Visitor<Void> {
+                                   Stmt.Visitor<Object> {
     private Environment environment = new Environment();
 
     void interpret(List<Stmt> statements) {
@@ -109,7 +109,10 @@ public class Interpeter implements Expr.Visitor<Object>,
      * Used for statements.
      */
     private void execute(Stmt stmt) {
-        stmt.accept(this);
+        Object result = stmt.accept(this);
+        if (result != null) {
+            System.out.println(result);
+        }
     }
 
     /*
@@ -139,9 +142,8 @@ public class Interpeter implements Expr.Visitor<Object>,
 
     /* Evaluates expression statements. */
     @Override
-    public Void visitExpressionStmt(Stmt.Expression stmt) {
-        evaluate(stmt.expression);
-        return null;
+    public Object visitExpressionStmt(Stmt.Expression stmt) {
+        return evaluate(stmt.expression);
     }
 
     /* Evaluates print statements. */
