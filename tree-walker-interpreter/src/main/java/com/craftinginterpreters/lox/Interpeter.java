@@ -105,11 +105,36 @@ public class Interpeter implements Expr.Visitor<Object>,
     }
 
     /*
-     * Helper method used to send the expression back to the interpreter's visitor.
+     * Helper method used to send the statement back to the interpreter's visitor.
      * Used for statements.
      */
     private void execute(Stmt stmt) {
         stmt.accept(this);
+    }
+
+    /*
+     * Helper method used to send the statements back to the interpreter's visitor.
+     * Used for block statements.
+     */
+    void executeBlock(List<Stmt> statements,
+                      Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;
+        }
+    }
+
+    /* Evaluates block statements. */
+    @Override
+    public Void visitBlockStmt(Stmt.Block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
     }
 
     /* Evaluates expression statements. */
