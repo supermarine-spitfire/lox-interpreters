@@ -91,12 +91,15 @@ public class Parser {
 
     /*
      * Equivalent to the production:
-     * exprStmt -> expression ";" ;
+     * exprStmt -> expression ";"? ;
      */
     private Stmt expressionStatement() {
         Expr expr = expression();
-        consume(SEMICOLON, "Expect ';' after expression.");
-        return new Stmt.Expression(expr);
+        if (match(SEMICOLON) || isAtEnd()) {
+            return new Stmt.Expression(expr);
+        } else {
+            throw error(peek(), "Expect ';' or end of file after expression.");
+        }
     }
 
     /*
