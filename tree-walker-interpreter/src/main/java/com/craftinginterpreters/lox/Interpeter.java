@@ -139,6 +139,14 @@ public class Interpeter implements Expr.Visitor<Object>,
         return null;
     }
 
+    /* Evaluates variable assignment expressions. */
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+
     /* Evaluates binary expressions. */
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
