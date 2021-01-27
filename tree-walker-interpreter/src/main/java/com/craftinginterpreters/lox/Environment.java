@@ -16,7 +16,18 @@ class Environment {
             "Undefined variable '" + name.lexeme + "'.");
     }
 
-    /* Binds a new name to a value. */
+    /* Assigns a new value to an existing variable. */
+    void assign(Token name, Object value) {
+        if (values.containsKey(name.lexeme)) {
+            values.put(name.lexeme, value);
+            return;
+        }
+
+        throw new RuntimeError(name,
+            "Undefined variable '" + name.lexeme + "'.");
+    }
+
+    /* Binds a new variable name to a value. */
     void define(String name, Object value) {
         values.put(name, value);
     }
