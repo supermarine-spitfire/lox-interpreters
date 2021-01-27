@@ -54,10 +54,11 @@ public class Parser {
 
     /*
      * Equivalent to the production:
-     * statement -> exprStmt | printStmt ;
+     * statement -> exprStmt | printStmt | block ;
      */
     private Stmt statement() {
         if (match(PRINT)) return printStatement();
+        if (match(LEFT_BRACE)) return new Stmt.Block(block());
 
         return expressionStatement();
     }
@@ -96,6 +97,21 @@ public class Parser {
         Expr expr = expression();
         consume(SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
+    }
+
+    /*
+     * Equivalent to the production:
+     * block -> "{" declaration* "}" ;
+     */
+    private List<Stmt> block() {
+        List<Stmt> statements = new ArrayList<>();
+
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            statements.add(declaration());
+        }
+
+        consume(RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
     }
 
     /*
