@@ -33,5 +33,6 @@ hs_err_pid*
 .idea/
 .settings/
 .vscode/
+.vs/
 welcome/HelloWorld/
 welcome/c-doubly-linked-list/
