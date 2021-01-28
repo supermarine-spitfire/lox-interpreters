@@ -189,6 +189,15 @@ public class Interpreter implements Expr.Visitor<Object>,
         return null;
     }
 
+    /* Evaluates while loops. */
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+        return null;
+    }
+
     /* Evaluates variable assignment expressions. */
     @Override
     public Object visitAssignExpr(Expr.Assign expr) {
