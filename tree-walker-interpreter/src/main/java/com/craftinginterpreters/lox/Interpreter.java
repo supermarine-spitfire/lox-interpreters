@@ -2,7 +2,7 @@ package com.craftinginterpreters.lox;
 
 import java.util.List;
 
-public class Interpeter implements Expr.Visitor<Object>,
+public class Interpreter implements Expr.Visitor<Object>,
                                    Stmt.Visitor<Void> {
     private Environment environment = new Environment();
 
