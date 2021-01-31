@@ -176,6 +176,14 @@ public class Interpreter implements Expr.Visitor<Object>,
         return null;
     }
 
+    /* Evaluates function statements. */
+    @Override
+    public Void visitFunctionStmt(Stmt.Function stmt) {
+        LoxFunction function = new LoxFunction(stmt);
+        environment.define(stmt.name.lexeme, function);
+        return null;
+    }
+
     /* Evaluates if statements. */
     @Override
     public Void visitIfStmt(Stmt.If stmt) {
