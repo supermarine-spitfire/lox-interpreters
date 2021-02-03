@@ -16,6 +16,8 @@ abstract class Stmt {
     
         R visitReturnStmt(Return stmt);
     
+        R visitBreakStmt(Break stmt);
+    
         R visitVarStmt(Var stmt);
     
         R visitWhileStmt(While stmt);
@@ -102,6 +104,18 @@ abstract class Stmt {
 
         final Token keyword;
         final Expr value;
+    }
+    static class Break extends Stmt {
+        Break(Token emptyVal) {
+            this.emptyVal = emptyVal;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitBreakStmt(this);
+        }
+
+        final Token emptyVal;
     }
     static class Var extends Stmt {
         Var(Token name, Expr initializer) {
