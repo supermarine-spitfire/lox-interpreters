@@ -212,6 +212,12 @@ public class Interpreter implements Expr.Visitor<Object>,
         throw new Return(value);
     }
 
+    /* Evaluates break statements. */
+    @Override
+    public Void visitBreakStmt(Stmt.Break stmt) {
+        throw new Break();
+    }
+
     /* Evaluates variable declarations. */
     @Override
     public Void visitVarStmt(Stmt.Var stmt) {
@@ -227,10 +233,14 @@ public class Interpreter implements Expr.Visitor<Object>,
     /* Evaluates while loops. */
     @Override
     public Void visitWhileStmt(Stmt.While stmt) {
-        while (isTruthy(evaluate(stmt.condition))) {
-            execute(stmt.body);
+        try {
+            while (isTruthy(evaluate(stmt.condition))) {
+                execute(stmt.body);
+            }
+            return null;
+        } catch (Break b) {
+            return  null;
         }
-        return null;
     }
 
     /* Evaluates variable assignment expressions. */
