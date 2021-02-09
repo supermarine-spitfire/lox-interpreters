@@ -218,6 +218,12 @@ public class Interpreter implements Expr.Visitor<Object>,
         throw new Break();
     }
 
+    /* Evaluates continue statements. */
+    @Override
+    public Void visitContinueStmt(Stmt.Continue stmt) {
+        throw new Continue();
+    }
+
     /* Evaluates variable declarations. */
     @Override
     public Void visitVarStmt(Stmt.Var stmt) {
@@ -235,7 +241,11 @@ public class Interpreter implements Expr.Visitor<Object>,
     public Void visitWhileStmt(Stmt.While stmt) {
         try {
             while (isTruthy(evaluate(stmt.condition))) {
-                execute(stmt.body);
+                try {
+                    execute(stmt.body);
+                } catch (Continue c) {
+                    continue;
+                }
             }
             return null;
         } catch (Break b) {
